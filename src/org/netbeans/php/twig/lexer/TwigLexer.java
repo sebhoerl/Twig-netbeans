@@ -21,9 +21,10 @@ public class TwigLexer implements Lexer<TwigTokenId> {
     protected TwigLanguageHierarchy hierarchy;
 
     enum State {
-        UNKNOWN,
-        OUTSIDE,
-        INSIDE
+        DATA,
+        BLOCK,
+        VAR,
+        COMMENT
     };
 
     State currentState;
@@ -35,10 +36,135 @@ public class TwigLexer implements Lexer<TwigTokenId> {
         this.hierarchy = hierarchy;
 
         if ( info.state() == null ) {
-            currentState = State.OUTSIDE;
+            currentState = State.DATA;
         } else {
             currentState = (State)info.state();
         }
+
+    }
+
+    public Token<TwigTokenId> lexData( LexerInput input ) {
+
+        String chunk = "";
+
+        while ( input.read() != LexerInput.EOF ) {
+
+            chunk = input.readText().toString();
+
+            // end data
+            if (
+                ( chunk.endsWith( "{%" ) ||
+                chunk.endsWith( "{{" ) ||
+                chunk.endsWith( "{#" ) ) &&
+                chunk.length() > 2
+            ) {
+                input.backup( 2 );
+                return info.tokenFactory().createToken( hierarchy.getToken( "TWIG_TEXT" ) );
+            }
+
+            // start block
+            if ( chunk.startsWith( "{%" ) ) {
+                currentState = State.BLOCK;
+                return info.tokenFactory().createToken( hierarchy.getToken( "TWIG_BLOCK_START" ) );
+            }
+
+            // start var
+            if ( chunk.startsWith( "{{" ) ) {
+                currentState = State.VAR;
+                return info.tokenFactory().createToken( hierarchy.getToken( "TWIG_VAR_START" ) );
+            }
+
+            // start comment
+            if ( chunk.toString().startsWith( "{#" ) ) {
+                currentState = State.COMMENT;
+                return info.tokenFactory().createToken( hierarchy.getToken( "TWIG_COMMENT_START" ) );
+            }
+
+        }
+
+        if ( input.readLength() < 1 ) return null;
+        return info.tokenFactory().createToken( hierarchy.getToken( "TWIG_TEXT" ) );
+
+    }
+
+    public Token<TwigTokenId> lexVar( LexerInput input ) {
+
+        String chunk = "";
+
+        while ( input.read() != LexerInput.EOF ) {
+
+            chunk = input.readText().toString();
+
+            // end var
+            if ( chunk.endsWith( "}}" ) && chunk.length() > 2 ) {
+                input.backup( 2 );
+                return info.tokenFactory().createToken( hierarchy.getToken( "TWIG_NAME" ) );
+            }
+
+            // start data
+            if ( chunk.startsWith( "}}" ) ) {
+                currentState = State.DATA;
+                return info.tokenFactory().createToken( hierarchy.getToken( "TWIG_VAR_END" ) );
+            }
+
+        }
+
+        if ( input.readLength() < 1 ) return null;
+        return info.tokenFactory().createToken( hierarchy.getToken( "TWIG_NAME" ) );
+
+    }
+
+    public Token<TwigTokenId> lexComment( LexerInput input ) {
+
+        String chunk = "";
+
+        while ( input.read() != LexerInput.EOF ) {
+
+            chunk = input.readText().toString();
+
+            // end comment
+            if ( chunk.endsWith( "#}" ) && chunk.length() > 2 ) {
+                input.backup( 2 );
+                return info.tokenFactory().createToken( hierarchy.getToken( "TWIG_COMMENT" ) );
+            }
+
+            // start data
+            if ( chunk.startsWith( "#}" ) ) {
+                currentState = State.DATA;
+                return info.tokenFactory().createToken( hierarchy.getToken( "TWIG_COMMENT_END" ) );
+            }
+
+        }
+
+        if ( input.readLength() < 1 ) return null;
+        return info.tokenFactory().createToken( hierarchy.getToken( "TWIG_COMMENT" ) );
+
+    }
+
+    public Token<TwigTokenId> lexBlock( LexerInput input ) {
+
+        String chunk = "";
+
+        while ( input.read() != LexerInput.EOF ) {
+
+            chunk = input.readText().toString();
+
+            // end block
+            if ( chunk.endsWith( "%}" ) && chunk.length() > 2 ) {
+                input.backup( 2 );
+                return info.tokenFactory().createToken( hierarchy.getToken( "TWIG_OPERATOR" ) );
+            }
+
+            // start data
+            if ( chunk.startsWith( "%}" ) ) {
+                currentState = State.DATA;
+                return info.tokenFactory().createToken( hierarchy.getToken( "TWIG_BLOCK_END" ) );
+            }
+
+        }
+
+        if ( input.readLength() < 1 ) return null;
+        return info.tokenFactory().createToken( hierarchy.getToken( "TWIG_OPERATOR" ) );
 
     }
 
@@ -47,47 +173,16 @@ public class TwigLexer implements Lexer<TwigTokenId> {
 
         LexerInput input = info.input();
 
-        while ( input.read() != LexerInput.EOF )
-        {
+        switch ( currentState ) {
 
-            String read = input.readText().toString();
-
-            // Instruction starts here
-            if ( read.length() == 2 && read.equals( "{%" ) ) {
-                currentState = State.INSIDE;
-                return info.tokenFactory().createToken( hierarchy.getToken( "OPEN_INSTRUCTION" ) );
-            }
-
-            // Instruction ends here
-            if ( read.length() == 2 && read.equals( "%}" ) ) {
-                currentState = State.OUTSIDE;
-                return info.tokenFactory().createToken( hierarchy.getToken( "CLOSE_INSTRUCTION" ) );
-            }
-
-            if ( read.length() == 2 && read.equals( "{{" ) ) {
-                currentState = State.INSIDE;
-                return info.tokenFactory().createToken( hierarchy.getToken( "OPEN_OUTPUT" ) );
-            }
-
-            if ( read.length() == 2 && read.equals( "}}" ) ) {
-                currentState = State.OUTSIDE;
-                return info.tokenFactory().createToken( hierarchy.getToken( "CLOSE_OUTPUT" ) );
-            }
-
-            // Normal area
-            if ( read.length() > 1 ) {
-                String sub = read.substring( read.length() - 2 );
-                if ( sub.equals( "{%" ) || sub.equals( "%}" ) || sub.equals( "}}" ) || sub.equals( "{{" ) ) {
-                    input.backup( 2 );
-                    return info.tokenFactory().createToken( hierarchy.getToken( (currentState == State.INSIDE) ? "INSIDE" : "DEFAULT" ) );
-                }
-            }
+            case BLOCK: return lexBlock( input );
+            case COMMENT: return lexComment( input );
+            case VAR: return lexVar( input );
 
         }
 
-        if ( input.readLength() < 1 ) return null;
-        return info.tokenFactory().createToken( hierarchy.getToken( (currentState == State.INSIDE) ? "INSIDE" : "DEFAULT"  ) );
-
+        return lexData( input );
+        
     }
 
     @Override

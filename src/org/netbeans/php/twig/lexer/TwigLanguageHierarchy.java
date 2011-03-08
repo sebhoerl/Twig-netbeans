@@ -27,18 +27,23 @@ public class TwigLanguageHierarchy extends LanguageHierarchy<TwigTokenId> {
         tokenList = new LinkedList<TwigTokenId>();
         tokenMap = new HashMap<String,TwigTokenId>();
 
-        tokenList.add( new TwigTokenId( "DEFAULT", "default", 1 ) );
+        tokenList.add( new TwigTokenId( "TWIG_TEXT", "text", 1 ) );
 
-        tokenList.add( new TwigTokenId( "OPEN_INSTRUCTION", "markup", 2 ) );
-        tokenList.add( new TwigTokenId( "CLOSE_INSTRUCTION", "markup", 3 ) );
+        tokenList.add( new TwigTokenId( "TWIG_COMMENT_START", "comment", 2 ) );
+        tokenList.add( new TwigTokenId( "TWIG_BLOCK_START", "markup", 3 ) );
+        tokenList.add( new TwigTokenId( "TWIG_VAR_START", "markup", 4 ) );
 
-        tokenList.add( new TwigTokenId( "OPEN_OUTPUT", "markup", 4 ) );
-        tokenList.add( new TwigTokenId( "CLOSE_OUTPUT", "markup", 5 ) );
+        tokenList.add( new TwigTokenId( "TWIG_COMMENT_END", "comment", 5 ) );
+        tokenList.add( new TwigTokenId( "TWIG_BLOCK_END", "markup", 6 ) );
+        tokenList.add( new TwigTokenId( "TWIG_VAR_END", "markup", 7 ) );
 
-        tokenList.add( new TwigTokenId( "OPEN_COMMENT", "comment", 6 ) );
-        tokenList.add( new TwigTokenId( "CLOSE_COMMENT", "comment", 7 ) );
+        tokenList.add( new TwigTokenId( "TWIG_NAME", "identifier", 8 ) );
+        tokenList.add( new TwigTokenId( "TWIG_NUMBER", "number", 9 ) );
+        tokenList.add( new TwigTokenId( "TWIG_STRING", "string", 10 ) );
+        tokenList.add( new TwigTokenId( "TWIG_OPERATOR", "keyword", 11 ) );
+        tokenList.add( new TwigTokenId( "TWIG_PUNCTUATION", "keyword", 12 ) );
 
-        tokenList.add( new TwigTokenId( "INSIDE", "expression", 8 ) );
+        tokenList.add( new TwigTokenId( "TWIG_COMMENT", "comment", 13 ) );
 
         for ( TwigTokenId token : tokenList )
             tokenMap.put( token.name(), token );
@@ -63,7 +68,5 @@ public class TwigLanguageHierarchy extends LanguageHierarchy<TwigTokenId> {
     protected String mimeType() {
         return "text/twig";
     }
-
-
 
 }
