@@ -1,0 +1,10 @@
+Twig syntax highlighting for Netbeans!
+
+After struggling around with all that Netbeans and Java (X_x) stuff I managed
+to get code highlighting working. Comments, blocks and variables are displayed in different colors.
+
+TODO:
+
+- Not only highlight blocks, but also content
+- Make color settings configurable
+- Let Netbeans highlight underlying code (HTML, JSON, ...)
