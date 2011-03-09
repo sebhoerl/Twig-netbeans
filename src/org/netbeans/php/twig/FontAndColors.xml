@@ -2,12 +2,17 @@
 
 <!DOCTYPE fontscolors PUBLIC "-//NetBeans//DTD Editor Fonts and Colors settings 1.1//EN" "http://www.netbeans.org/dtds/EditorFontsColors-1_1.dtd">
 <fontscolors>
-    <!--<fontcolor name="default" foreColor="black" />
-    <fontcolor name="expression" foreColor="orange" />-->
-    <fontcolor name="markup" foreColor="blue">
-        <font style="bold" />
-    </fontcolor>
-    <fontcolor name="identifier" foreColor="red" />
-    <fontcolor name="comment" foreColor="gray" />
-    <fontcolor name="keyword" foreColor="orange" />
+
+    <fontcolor name="COMMENT_START" foreColor="gray" />
+    <fontcolor name="COMMENT" foreColor="gray" />
+    <fontcolor name="COMMENT_END" foreColor="gray" />
+
+    <fontcolor name="BLOCK_START" foreColor="blue"><font style="bold" /></fontcolor>
+    <fontcolor name="_DEBUG_BLOCK" foreColor="orange" />
+    <fontcolor name="BLOCK_END" foreColor="blue"><font style="bold" /></fontcolor>
+
+    <fontcolor name="VAR_START" foreColor="blue"><font style="bold" /></fontcolor>
+    <fontcolor name="_DEBUG_VAR" foreColor="red" />
+    <fontcolor name="VAR_END" foreColor="blue"><font style="bold" /></fontcolor>
+
 </fontscolors>

@@ -91,7 +91,7 @@
         <folder name="text">
             <folder name="twig">
                 <file name="language.instance">
-                    <attr name="instanceCreate" methodvalue="org.netbeans.php.twig.lexer.TwigTokenId.getLanguage" />
+                    <attr name="instanceCreate" methodvalue="org.netbeans.php.twig.lexer.NbTwigTokenId.getLanguage" />
                     <attr name="instanceOf" stringvalue="org.netbeans.api.lexer.Language" />
                 </file>
                 <folder name="FontsColors">
