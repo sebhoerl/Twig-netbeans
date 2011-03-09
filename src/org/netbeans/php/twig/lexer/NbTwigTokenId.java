@@ -2,6 +2,12 @@ package org.netbeans.php.twig.lexer;
 
 import org.netbeans.api.lexer.*;
 
+/**
+ * "Converts" the custom tokens of the TwigLexer into
+ * token ids for the Netbeans API.
+ *
+ * @author Sebastian Hörl
+ */
 public class NbTwigTokenId implements TokenId {
 
     protected String name;

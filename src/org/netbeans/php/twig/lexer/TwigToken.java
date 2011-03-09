@@ -1,5 +1,14 @@
 package org.netbeans.php.twig.lexer;
 
+/**
+ * Token class for the Twig lexer.
+ *
+ * For each new Token an entry has to be added in Type,
+ * typeToString and typeToOrdinal. NetBeans API depends
+ * on these mappings.
+ *
+ * @author Sebastian Hörl
+ */
 public class TwigToken {
 
     public enum Type {

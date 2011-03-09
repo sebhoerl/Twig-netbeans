@@ -74,17 +74,7 @@
     </folder>
     <folder name="Services">
         <folder name="MIMEResolver">
-            <file name="TwigResolver.xml" url="TwigResolver.xml">
-                <attr name="displayName" bundlevalue="org.netbeans.php.twig.Bundle#Services/MIMEResolver/TwigResolver.xml"/>
-            </file>
-        </folder>
-    </folder>
-    <folder name="Templates">
-        <folder name="Other">
-            <file name="TwigTemplate.twig" url="TwigTemplate.twig">
-                <attr name="displayName" bundlevalue="org.netbeans.php.twig.Bundle#Templates/Other/TwigTemplate.twig"/>
-                <attr name="template" boolvalue="true"/>
-            </file>
+            <file name="resolver.xml" url="resolver.xml" />
         </folder>
     </folder>
     <folder name="Editors">
@@ -97,7 +87,7 @@
                 <folder name="FontsColors">
                     <folder name="NetBeans">
                         <folder name="Defaults">
-                            <file name="FontAndColors.xml" url="FontAndColors.xml" />
+                            <file name="highlighting.xml" url="highlighting.xml" />
                         </folder>
                     </folder>
                 </folder>

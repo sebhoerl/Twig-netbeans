@@ -3,6 +3,12 @@ package org.netbeans.php.twig.lexer;
 import java.util.*;
 import org.netbeans.spi.lexer.*;
 
+/**
+ * Plugin entry point for the code highlighting stuff. Maps
+ * TwigToken.Type values to NbTwigToken instances for the Netbeans API.
+ *
+ * @author Sebastian Hörl
+ */
 public class NbTwigLanguageHierarchy extends LanguageHierarchy<NbTwigTokenId> {
 
     protected ArrayList<NbTwigTokenId> tokenList = new ArrayList();

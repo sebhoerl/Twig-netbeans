@@ -6,6 +6,14 @@ import org.netbeans.spi.lexer.LexerInput;
 import org.netbeans.spi.lexer.LexerRestartInfo;
 import java.util.*;
 
+/**
+ * The actual Netbeans Lexer implementation for Twig. Reads all
+ * input data and lets the TwigLexer create a token list.
+ * Tokens are then just passed one after another without doing
+ * lexing stuff in nextToken.
+ *
+ * @author Sebastian Hörl
+ */
 public class NbTwigLexer implements Lexer<NbTwigTokenId> {
 
     protected LexerRestartInfo<NbTwigTokenId> info;

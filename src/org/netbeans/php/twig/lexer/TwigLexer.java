@@ -3,6 +3,15 @@ package org.netbeans.php.twig.lexer;
 import java.util.*;
 import java.util.regex.*;
 
+/**
+ * Lexer for the Twig language.
+ * Based on https://github.com/fabpot/Twig/blob/master/lib/Twig/Lexer.php
+ *
+ * All code splitting stuff into tokens is done here. The NetBeans
+ * interfaces are just some kind of decorators in this plugin.
+ *
+ * @author Sebastian Hörl
+ */
 public class TwigLexer {
 
     public enum State {
