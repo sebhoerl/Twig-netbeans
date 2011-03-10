@@ -85,6 +85,9 @@
                     <attr name="instanceCreate" methodvalue="org.netbeans.php.twig.lexer.NbTwigTokenId.getLanguage" />
                     <attr name="instanceOf" stringvalue="org.netbeans.api.lexer.Language" />
                 </file>
+                <file name="org-netbeans-php-twig-TwigEmbeddingProvider$Factory.instance">
+                    <attr name="instanceOf" stringvalue="org.netbeans.modules.parsing.spi.TaskFactory"/>
+                </file>
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="org.netbeans.php.twig.Bundle"/>
                 <folder name="FontsColors">
                     <folder name="NetBeans">

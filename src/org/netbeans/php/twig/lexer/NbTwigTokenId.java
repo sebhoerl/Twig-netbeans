@@ -13,11 +13,13 @@ public class NbTwigTokenId implements TokenId {
     protected String name;
     protected int ordinal;
     protected String category;
+    public TwigToken.Type type;
 
     public NbTwigTokenId( TwigToken.Type type ) {
         this.name = TwigToken.typeToString( type );
         this.ordinal = TwigToken.typeToOrdinal( type );
         this.category = TwigToken.typeToString( type );
+        this.type = type;
     }
 
     @Override

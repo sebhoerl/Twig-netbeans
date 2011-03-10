@@ -1,7 +1,11 @@
 package org.netbeans.php.twig.lexer;
 
 import java.util.*;
+import org.netbeans.api.lexer.InputAttributes;
+import org.netbeans.api.lexer.LanguagePath;
+import org.netbeans.api.lexer.Token;
 import org.netbeans.spi.lexer.*;
+import org.netbeans.api.html.lexer.HTMLTokenId;
 
 /**
  * Plugin entry point for the code highlighting stuff. Maps
@@ -27,10 +31,23 @@ public class NbTwigLanguageHierarchy extends LanguageHierarchy<NbTwigTokenId> {
 
     }
 
+    @Override
+    protected LanguageEmbedding<?> embedding( Token<NbTwigTokenId> token, LanguagePath languagePath, InputAttributes inputAttributes) {
+        NbTwigTokenId id = token.id();
+
+        if ( id.type == TwigToken.Type.TEXT ) {
+
+            return LanguageEmbedding.create( HTMLTokenId.language(), 0, 0, true );
+
+        }
+
+        return null;
+    }
+
     public NbTwigTokenId getToken( TwigToken.Type type ) {
         return tokenMap.get( type );
     }
-
+    
     @Override
     protected Collection<NbTwigTokenId> createTokenIds() {
         return tokenList;
