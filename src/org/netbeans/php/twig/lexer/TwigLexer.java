@@ -14,22 +14,18 @@ import java.util.regex.*;
  */
 public class TwigLexer {
 
-    public enum State {
-        DATA,
-        BLOCK,
-        VAR,
-        COMMENT
-    }
-
     public ArrayList<TwigToken> tokens;
 
     static Pattern REGEX_NAME = Pattern.compile( "^[A-Za-z_][A-Za-z0-9_]*" );
     static Pattern REGEX_NUMBER = Pattern.compile( "^[0-9]+(\\.[0-9]+)?" );
     static Pattern REGEX_STRING = Pattern.compile( "^\"([^\"\\\\]*(\\\\.[^\"\\\\]*)*)\"|^'([^'\\\\]*(\\\\.[^'\\\\]*)*)'", Pattern.MULTILINE );
     static Pattern REGEX_ALPHANUM_END = Pattern.compile( "[A-Za-z0-9]$" );
+    //static Pattern REGEX_WHITESPACE = Pattern.compile( "^\\s+" );
+    static Pattern REGEX_WHITESPACE = Pattern.compile( "^[ \t\r]" );
+    static Pattern REGEX_WHITESPACE_END = Pattern.compile( "[ \t\r]+$" );
     Pattern REGEX_OPERATOR = null;
 
-    static List<String> PUNCTUATION = Arrays.asList( "(", ")", "[", "]", "{", "}", "?", ":", ".", ",", "|" );
+    static String PUNCTUATION = "()[]{}?:.,|";
 
     List<String> OPERATORS = Arrays.asList(
         "=", "not", "+", "-", "or", "and", "==", "!=", ">", "<", ">=", "<=",
@@ -46,7 +42,7 @@ public class TwigLexer {
     static String VAR_START = "{{";
     static String VAR_END = "}}";
 
-    State state;
+    TwigState state;
 
     protected class SortOperators implements Comparator {
 
@@ -102,10 +98,10 @@ public class TwigLexer {
     protected int end;
     protected String code;
 
-    public List<TwigToken> tokenize( String lexCode, State backupState ) {
+    public List<TwigToken> tokenize( String lexCode, TwigState backupState ) {
 
         tokens = new ArrayList();
-        state = ( backupState == null ) ? State.DATA : backupState;
+        state = ( backupState == null ) ? new TwigState() : backupState;
 
         code = lexCode;
         code = code.replace( "\r\n", "\n" );
@@ -116,7 +112,7 @@ public class TwigLexer {
 
         while ( cursor < end ) {
 
-            switch ( state ) {
+            switch ( state.mode ) {
                 case DATA:
                     lexData(); break;
                 case BLOCK:
@@ -157,6 +153,7 @@ public class TwigLexer {
         if ( tmpPos > -1 && tmpPos < pos ) {
             pos = tmpPos;
             token = BLOCK_START;
+            state.seekTag = true;
         }
 
         // No more markups
@@ -176,13 +173,13 @@ public class TwigLexer {
 
             pushToken( TwigToken.Type.COMMENT_START, token );
             moveCursor( token );
-            state = State.COMMENT;
+            state.mode = TwigState.Mode.COMMENT;
 
         } else if ( token.equals( BLOCK_START ) ) {
 
             pushToken( TwigToken.Type.BLOCK_START, token );
             moveCursor( token );
-            state = State.BLOCK;
+            state.mode = TwigState.Mode.BLOCK;
 
             // TODO: handle raw input
 
@@ -190,7 +187,7 @@ public class TwigLexer {
 
             pushToken( TwigToken.Type.VAR_START, token );
             moveCursor( token );
-            state = State.VAR;
+            state.mode = TwigState.Mode.VAR;
 
         }
 
@@ -213,52 +210,164 @@ public class TwigLexer {
             moveCursor( text );
             pushToken( TwigToken.Type.COMMENT_END, COMMENT_END );
             moveCursor( COMMENT_END );
-            state = State.DATA;
+            state.mode = TwigState.Mode.DATA;
         }
 
     }
 
     protected void lexVar() {
 
-        String text = "";
         int pos = code.indexOf( VAR_END, cursor );
 
-        if ( pos < 0 ) {
-            // TODO: Unclosed var!
-            // Doing nothing for now... let following data until end be var
-            text = code.substring( cursor );
-            pushToken( TwigToken.Type._DEBUG_VAR, text );
-            moveCursor( text );
-        } else {
-            text = code.substring( cursor, pos );
-            pushToken( TwigToken.Type._DEBUG_VAR, text );
-            moveCursor( text );
+        if ( pos == cursor && state.brackets.empty() ) {
             pushToken( TwigToken.Type.VAR_END, VAR_END );
             moveCursor( VAR_END );
-            state = State.DATA;
+            state.mode = TwigState.Mode.DATA;
+        } else {
+            lexExpression();
         }
 
     }
 
     protected void lexBlock() {
 
-        String text = "";
         int pos = code.indexOf( BLOCK_END, cursor );
 
-        if ( pos < 0 ) {
-            // TODO: Unclosed block!
-            // Doing nothing for now... let following data until end be var
-            text = code.substring( cursor );
-            pushToken( TwigToken.Type._DEBUG_BLOCK, text );
-            moveCursor( text );
-        } else {
-            text = code.substring( cursor, pos );
-            pushToken( TwigToken.Type._DEBUG_BLOCK, text );
-            moveCursor( text );
+        if ( pos == cursor && state.brackets.empty() ) {
             pushToken( TwigToken.Type.BLOCK_END, BLOCK_END );
             moveCursor( BLOCK_END );
-            state = State.DATA;
+            state.mode = TwigState.Mode.DATA;
+        } else {
+            lexExpression();
         }
+
+    }
+
+    protected void lexExpression() {
+
+        Matcher matcher;
+        String chunk = code.substring( cursor );
+
+        matcher = REGEX_WHITESPACE.matcher( chunk );
+        if ( matcher.find() ) {
+
+            pushToken( TwigToken.Type.WHITESPACE, matcher.group() );
+            moveCursor( matcher.group() );
+            return;
+
+        }
+
+        matcher = REGEX_OPERATOR.matcher( chunk );
+        if ( !state.seekTag && matcher.find() ) {
+
+            String operator = matcher.group();
+            matcher = REGEX_WHITESPACE_END.matcher( operator );
+
+            if ( matcher.find() ) {
+
+                operator = operator.substring( 0, matcher.start() );
+                pushToken( TwigToken.Type.OPERATOR, operator );
+                moveCursor( operator );
+
+                pushToken( TwigToken.Type.WHITESPACE, matcher.group() );
+                moveCursor( matcher.group() );
+
+            } else {
+
+                pushToken( TwigToken.Type.OPERATOR, operator );
+                moveCursor( operator );
+
+            }
+
+            return;
+
+        }
+
+        matcher = REGEX_NAME.matcher( chunk );
+        if ( matcher.find() ) {
+
+            pushToken( state.seekTag ? TwigToken.Type.TAG : TwigToken.Type.NAME, matcher.group() );
+            moveCursor( matcher.group() );
+            state.seekTag = false;
+            return;
+
+        }
+
+        matcher = REGEX_NUMBER.matcher( chunk );
+        if ( matcher.find() ) {
+
+            pushToken( TwigToken.Type.NUMBER, matcher.group() );
+            moveCursor( matcher.group() );
+            return;
+
+        }
+
+        String currentChar = chunk.substring( 0, 1 );
+        if ( PUNCTUATION.indexOf( currentChar ) > -1 ) {
+
+            if ( "([{".indexOf( currentChar ) > - 1 ) { // opening brackets
+
+                state.brackets.push( currentChar );
+                pushToken( TwigToken.Type.PUNCTUATION, currentChar );
+                moveCursor( currentChar );
+                return;
+
+            } else if ( ")]}".indexOf( currentChar ) > - 1 ) { // closing brackets
+
+                if ( state.brackets.empty() ) {
+
+                    // TODO: Too many closing brackets!!!
+                    pushToken( TwigToken.Type.ERROR, currentChar );
+                    moveCursor( String.valueOf( currentChar ) );
+                    return;
+
+                } else {
+                    
+                    String bracket = state.brackets.pop()
+                        .replace( "(", ")" )
+                        .replace( "{", "}" )
+                        .replace( "[", "]" );
+
+                    if ( !bracket.equals( currentChar ) ) {
+
+                        // TODO: We got a bracket but the wrong one...
+                        pushToken( TwigToken.Type.ERROR, currentChar );
+                        moveCursor( String.valueOf( currentChar ) );
+                        return;
+
+                    } else {
+
+                        pushToken( TwigToken.Type.PUNCTUATION, currentChar );
+                        moveCursor( currentChar );
+                        return;
+
+                    }
+                    
+                }
+
+            } else { // no bracket
+
+                pushToken( TwigToken.Type.PUNCTUATION, currentChar );
+                moveCursor( currentChar );
+                return;
+
+            }
+
+        }
+
+        matcher = REGEX_STRING.matcher( chunk );
+        if ( matcher.find() ) {
+
+            pushToken( TwigToken.Type.STRING, matcher.group() );
+            moveCursor( matcher.group() );
+            return;
+
+        }
+
+        // TODO: We got some unlexable code...
+        pushToken( TwigToken.Type.ERROR, currentChar );
+        moveCursor( currentChar );
+        return;
 
     }
 
@@ -270,7 +379,7 @@ public class TwigLexer {
         tokens.add( new TwigToken( type, content, cursor, state ) );
     }
 
-    public State getState() {
+    public TwigState getState() {
         return state;
     }
 

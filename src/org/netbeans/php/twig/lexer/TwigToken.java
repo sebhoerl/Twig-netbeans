@@ -29,7 +29,10 @@ public class TwigToken {
         PUNCTUATION,
         COMMENT,
         _DEBUG_BLOCK,
-        _DEBUG_VAR
+        _DEBUG_VAR,
+        WHITESPACE,
+        ERROR,
+        TAG
     };
 
     static public String typeToString( Type type ) {
@@ -52,6 +55,9 @@ public class TwigToken {
             case COMMENT: return "COMMENT";
             case _DEBUG_BLOCK: return "_DEBUG_BLOCK";
             case _DEBUG_VAR: return "_DEBUG_VAR";
+            case WHITESPACE: return "WHITESPACE";
+            case ERROR: return "ERROR";
+            case TAG: return "TAG";
         }
 
         System.out.println( "Unknown Twig token!" );
@@ -79,6 +85,9 @@ public class TwigToken {
             case COMMENT: return 15;
             case _DEBUG_BLOCK: return 16;
             case _DEBUG_VAR: return 17;
+            case WHITESPACE: return 18;
+            case ERROR: return 19;
+            case TAG: return 20;
         }
 
         System.out.println( "Unknown Twig token!" );
@@ -93,9 +102,9 @@ public class TwigToken {
     public int offset;
     public String content;
     Type type;
-    TwigLexer.State state;
+    TwigState state;
 
-    public TwigToken( Type type, String content, int offset, TwigLexer.State state ) {
+    public TwigToken( Type type, String content, int offset, TwigState state ) {
         this.offset = offset;
         this.type = type;
         this.content = content;

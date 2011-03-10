@@ -3,6 +3,7 @@ package org.netbeans.php.twig.lexer;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.*;
+import java.util.regex.*;
 
 /**
  * Some testcases.
@@ -67,6 +68,19 @@ public class TwigLexerTest {
 
     }
 
+    /*@Test
+    public void testRegex() {
+
+        Pattern p = Pattern.compile( "^a. " );
+        String code = "a1 a2 a3 a4";
+        Matcher m = p.matcher( code );
+        Matcher m2 = p.matcher( code.substring( 3 ) );
+
+        assertTrue( m.find() );
+        assertTrue( m2.find() );
+
+    }*/
+
     @Test
     public void testLexer() {
 
@@ -89,15 +103,29 @@ public class TwigLexerTest {
         assertEquals( it.next().type, TwigToken.Type.COMMENT_END );
         assertEquals( it.next().type, TwigToken.Type.TEXT );
         assertEquals( it.next().type, TwigToken.Type.BLOCK_START );
-        assertEquals( it.next().type, TwigToken.Type._DEBUG_BLOCK );
+        assertEquals( it.next().type, TwigToken.Type.WHITESPACE );
+        assertEquals( it.next().type, TwigToken.Type.TAG );
+        assertEquals( it.next().type, TwigToken.Type.WHITESPACE );
+        assertEquals( it.next().type, TwigToken.Type.NAME );
+        assertEquals( it.next().type, TwigToken.Type.WHITESPACE );
+        assertEquals( it.next().type, TwigToken.Type.OPERATOR );
+        assertEquals( it.next().type, TwigToken.Type.WHITESPACE );
+        assertEquals( it.next().type, TwigToken.Type.NAME );
+        assertEquals( it.next().type, TwigToken.Type.WHITESPACE );
         assertEquals( it.next().type, TwigToken.Type.BLOCK_END );
         assertEquals( it.next().type, TwigToken.Type.TEXT );
         assertEquals( it.next().type, TwigToken.Type.VAR_START );
-        assertEquals( it.next().type, TwigToken.Type._DEBUG_VAR );
+        assertEquals( it.next().type, TwigToken.Type.WHITESPACE );
+        assertEquals( it.next().type, TwigToken.Type.NAME );
+        assertEquals( it.next().type, TwigToken.Type.PUNCTUATION );
+        assertEquals( it.next().type, TwigToken.Type.NAME );
+        assertEquals( it.next().type, TwigToken.Type.WHITESPACE );
         assertEquals( it.next().type, TwigToken.Type.VAR_END );
         assertEquals( it.next().type, TwigToken.Type.TEXT );
         assertEquals( it.next().type, TwigToken.Type.BLOCK_START );
-        assertEquals( it.next().type, TwigToken.Type._DEBUG_BLOCK );
+        assertEquals( it.next().type, TwigToken.Type.WHITESPACE );
+        assertEquals( it.next().type, TwigToken.Type.TAG );
+        assertEquals( it.next().type, TwigToken.Type.WHITESPACE );
         assertEquals( it.next().type, TwigToken.Type.BLOCK_END );
         assertEquals( it.next().type, TwigToken.Type.TEXT );
         assertEquals( it.next().type, TwigToken.Type.EOF );

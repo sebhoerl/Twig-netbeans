@@ -80,17 +80,28 @@
     <folder name="Editors">
         <folder name="text">
             <folder name="twig">
+                <file name="org-netbeans-modules-editor-NbEditorKit.instance"/>
                 <file name="language.instance">
                     <attr name="instanceCreate" methodvalue="org.netbeans.php.twig.lexer.NbTwigTokenId.getLanguage" />
                     <attr name="instanceOf" stringvalue="org.netbeans.api.lexer.Language" />
                 </file>
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.netbeans.php.twig.Bundle"/>
                 <folder name="FontsColors">
                     <folder name="NetBeans">
                         <folder name="Defaults">
-                            <file name="highlighting.xml" url="highlighting.xml" />
+                            <file name="highlighting.xml" url="highlighting.xml">
+                                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.netbeans.php.twig.Bundle"/>
+                            </file>
                         </folder>
                     </folder>
                 </folder>
+            </folder>
+        </folder>
+    </folder>
+    <folder name="OptionsDialog">
+        <folder name="PreviewExamples">
+            <folder name="text">
+                <file name="twig" url="example.html.twig"/>
             </folder>
         </folder>
     </folder>

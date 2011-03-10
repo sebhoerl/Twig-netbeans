@@ -38,7 +38,7 @@ public class NbTwigLexer implements Lexer<NbTwigTokenId> {
 
         it = lexer.tokenize(
             input.readText().toString(),
-            ( info.state() == null ) ? null : (TwigLexer.State) info.state()
+            ( info.state() == null ) ? null : (TwigState) info.state()
         ).iterator();
 
         input.backup( input.readLengthEOF() );
