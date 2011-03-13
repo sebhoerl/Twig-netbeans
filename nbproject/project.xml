@@ -98,7 +98,10 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>org.netbeans.php.twig</package>
+                <package>org.netbeans.php.twig.lexer</package>
+            </public-packages>
         </data>
     </configuration>
 </project>
