@@ -376,6 +376,7 @@ public class TwigLexer {
     }
 
     protected void pushToken( TwigToken.Type type, String content ) {
+        if ( content.length() == 0 && type != TwigToken.Type.EOF ) return;
         tokens.add( new TwigToken( type, content, cursor, state ) );
     }
 
