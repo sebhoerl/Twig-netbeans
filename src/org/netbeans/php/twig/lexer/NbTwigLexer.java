@@ -27,7 +27,7 @@ public class NbTwigLexer implements Lexer<NbTwigTokenId> {
 
         this.info = info;
         this.hierarchy = hierarchy;
-        this.lexer = hierarchy.getLexer();
+        this.lexer = new TwigLexer();
         input = info.input();
 
     }

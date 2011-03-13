@@ -17,7 +17,6 @@ public class NbTwigLanguageHierarchy extends LanguageHierarchy<NbTwigTokenId> {
 
     protected ArrayList<NbTwigTokenId> tokenList = new ArrayList();
     protected HashMap<TwigToken.Type,NbTwigTokenId> tokenMap = new HashMap();
-    protected TwigLexer lexer = new TwigLexer();
 
     NbTwigLanguageHierarchy() {
 
@@ -57,8 +56,6 @@ public class NbTwigLanguageHierarchy extends LanguageHierarchy<NbTwigTokenId> {
     protected Lexer<NbTwigTokenId> createLexer(LexerRestartInfo<NbTwigTokenId> lri) {
         return new NbTwigLexer( lri, this );
     }
-
-    public TwigLexer getLexer() { return lexer; }
 
     @Override
     protected String mimeType() {
