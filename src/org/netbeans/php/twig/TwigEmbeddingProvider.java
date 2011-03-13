@@ -1,6 +1,12 @@
 package org.netbeans.php.twig;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import org.netbeans.php.twig.lexer.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.netbeans.modules.parsing.api.Embedding;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.spi.EmbeddingProvider;
@@ -14,6 +20,20 @@ import org.netbeans.modules.parsing.spi.TaskFactory;
  * @author Sebastian Hörl
  */
 public class TwigEmbeddingProvider extends EmbeddingProvider {
+
+    String readOutput( InputStream stream ) throws IOException {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader( stream ) );
+        StringBuilder sb = new StringBuilder();
+        String line = null;
+
+        while ((line = reader.readLine()) != null) {
+            sb.append( line ).append( "\n" );
+        }
+        
+        return sb.toString();
+
+    }
 
     @Override
     public List<Embedding> getEmbeddings(Snapshot snapshot) {
@@ -60,6 +80,8 @@ public class TwigEmbeddingProvider extends EmbeddingProvider {
             embeddings.add( snapshot.create( from, length, "text/html" ) );
 
         }
+
+        if ( embeddings.isEmpty() ) return Collections.emptyList();
 
         return Collections.singletonList( Embedding.create( embeddings ) );
 

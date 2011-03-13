@@ -57,7 +57,7 @@ public class NbTwigLexer implements Lexer<NbTwigTokenId> {
         return info.tokenFactory().createToken( hierarchy.getToken( token.type ) );
 
     }
-
+    
     @Override
     public Object state() {
         return lexer.getState();
