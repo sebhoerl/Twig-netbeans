@@ -1,11 +1,11 @@
 <html>
     <body>
-        {# Twig example: for loop #}
+        {{ image( 'img/header.png' ) }}
         <ul>
-        {% for user in users %}
-            <li>{{ user.name|title }} </li>
-        {% endfor %}
+            {# usage example: for loop #}
+            {% for user in users %}
+                <li>{{ user.name }}</li>
+            {% endfor %}
         </ul>
-        Number: {% for i in 1..10 %} {{i}} {% endfor %}
     </body>
 </html>
