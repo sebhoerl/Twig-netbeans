@@ -21,20 +21,6 @@ import org.netbeans.modules.parsing.spi.TaskFactory;
  */
 public class TwigEmbeddingProvider extends EmbeddingProvider {
 
-    String readOutput( InputStream stream ) throws IOException {
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader( stream ) );
-        StringBuilder sb = new StringBuilder();
-        String line = null;
-
-        while ((line = reader.readLine()) != null) {
-            sb.append( line ).append( "\n" );
-        }
-        
-        return sb.toString();
-
-    }
-
     @Override
     public List<Embedding> getEmbeddings(Snapshot snapshot) {
 
