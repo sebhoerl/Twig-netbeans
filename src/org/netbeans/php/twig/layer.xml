@@ -67,6 +67,8 @@
                         <attr name="dataObjectClass" stringvalue="org.netbeans.php.twig.TwigDataObject"/>
                         <attr name="instanceCreate" methodvalue="org.openide.loaders.DataLoaderPool.factory"/>
                         <attr name="mimeType" stringvalue="text/twig"/>
+                        <attr name="SystemFileSystem.icon" urlvalue="nbresloc:/org/netbeans/php/twig/icon.png"/>
+                        <attr name="iconBase" stringvalue="org/netbeans/php/twig/icon.png"/>
                     </file>
                 </folder>
             </folder>
@@ -106,6 +108,16 @@
             <folder name="text">
                 <file name="twig" url="example.html.twig"/>
             </folder>
+        </folder>
+    </folder>
+    <folder name="Templates">
+        <folder name="Other">
+            <file name="TwigTemplate.html.twig" url="TwigTemplate.html.twig">
+                <attr name="SystemFileSystem.icon" urlvalue="nbresloc:/org/netbeans/php/twig/icon.png"/>
+                <attr name="iconBase" stringvalue="org/netbeans/php/twig/icon.png"/>
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="org.netbeans.php.twig.Bundle"/>
+                <attr name="template" boolvalue="true"/>
+            </file>
         </folder>
     </folder>
 </filesystem>
