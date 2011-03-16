@@ -21,13 +21,14 @@ public class TwigLexer {
     static Pattern REGEX_STRING = Pattern.compile( "^\"([^\"\\\\]*(\\\\.[^\"\\\\]*)*)\"|^'([^'\\\\]*(\\\\.[^'\\\\]*)*)'", Pattern.MULTILINE );
     static Pattern REGEX_ALPHANUM_END = Pattern.compile( "[A-Za-z0-9]$" );
     //static Pattern REGEX_WHITESPACE = Pattern.compile( "^\\s+" );
-    static Pattern REGEX_WHITESPACE = Pattern.compile( "^[ \t\r]" );
-    static Pattern REGEX_WHITESPACE_END = Pattern.compile( "[ \t\r]+$" );
+    static Pattern REGEX_WHITESPACE = Pattern.compile( "^[\\s]" );
+    static Pattern REGEX_WHITESPACE_END = Pattern.compile( "[\\s]+$" );
     Pattern REGEX_OPERATOR = null;
 
     static String PUNCTUATION = "()[]{}?:.,|";
 
     List<String> OPERATORS = Arrays.asList(
+        "import", "from", "as",
         "=", "not", "+", "-", "or", "and", "==", "!=", ">", "<", ">=", "<=",
         "not in", "in", "+", "-", "~", "*", "/", "//", "%",
         "is", "is not", "..", "**"
@@ -199,8 +200,8 @@ public class TwigLexer {
         int pos = code.indexOf( COMMENT_END, cursor );
 
         if ( pos < 0 ) {
-            // TODO: Unclosed comment!
-            // Doing nothing for now... let following data until end be comment
+            // Unclosed comment. Just add the rest of the code as commented text.
+            // Parser will recognize it as an error.
             text = code.substring( cursor );
             pushToken( TwigToken.Type.COMMENT, text );
             moveCursor( text );

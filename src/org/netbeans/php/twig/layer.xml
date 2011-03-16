@@ -90,6 +90,12 @@
                 <file name="org-netbeans-php-twig-TwigEmbeddingProvider$Factory.instance">
                     <attr name="instanceOf" stringvalue="org.netbeans.modules.parsing.spi.TaskFactory"/>
                 </file>
+                <file name="org-netbeans-php-twig-parser-HighlightErrorsTask$Factory.instance">
+                    <attr name="instanceOf" stringvalue="org.netbeans.modules.parsing.spi.TaskFactory"/>
+                </file>
+                <file name="org-netbeans-php-twig-parser-NbTwigParser$Factory.instance">
+                    <attr name="instanceOf" stringvalue="org.netbeans.modules.parsing.spi.ParserFactory"/>
+                </file>
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="org.netbeans.php.twig.Bundle"/>
                 <folder name="FontsColors">
                     <folder name="NetBeans">

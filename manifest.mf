@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 OpenIDE-Module: org.netbeans.php.twig/1
-OpenIDE-Module-Implementation-Version: 2
+OpenIDE-Module-Implementation-Version: 1
 OpenIDE-Module-Layer: org/netbeans/php/twig/layer.xml
 OpenIDE-Module-Localizing-Bundle: org/netbeans/php/twig/Bundle.properties
 

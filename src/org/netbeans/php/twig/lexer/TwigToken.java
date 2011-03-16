@@ -101,8 +101,8 @@ public class TwigToken {
 
     public int offset;
     public String content;
-    Type type;
-    TwigState state;
+    public Type type;
+    public TwigState state;
 
     public TwigToken( Type type, String content, int offset, TwigState state ) {
         this.offset = offset;
