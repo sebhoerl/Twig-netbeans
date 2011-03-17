@@ -29,6 +29,6 @@ public class TwigState {
     boolean captureRawData = false;
     boolean seekTag = false;
     Mode mode = Mode.DATA;
-    Stack<String> brackets = new Stack();
+    Stack<String> brackets = new Stack<String>();
 
 }

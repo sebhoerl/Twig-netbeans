@@ -40,7 +40,7 @@ public class HighlightErrorsTask extends ParserResultTask {
         NbTwigParser.Result result = (NbTwigParser.Result) r;
         List<TwigError> errors;
         Document document;
-        List<ErrorDescription> descs = new ArrayList();
+        List<ErrorDescription> descs = new ArrayList<ErrorDescription>();
 
         try {
             errors = result.getErrors();

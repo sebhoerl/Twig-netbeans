@@ -23,8 +23,8 @@ import org.netbeans.api.html.lexer.HTMLTokenId;
  */
 public class NbTwigLanguageHierarchy extends LanguageHierarchy<NbTwigTokenId> {
 
-    protected ArrayList<NbTwigTokenId> tokenList = new ArrayList();
-    protected HashMap<TwigToken.Type,NbTwigTokenId> tokenMap = new HashMap();
+    protected ArrayList<NbTwigTokenId> tokenList = new ArrayList<NbTwigTokenId>();
+    protected HashMap<TwigToken.Type,NbTwigTokenId> tokenMap = new HashMap<TwigToken.Type,NbTwigTokenId>();
 
     NbTwigLanguageHierarchy() {
 

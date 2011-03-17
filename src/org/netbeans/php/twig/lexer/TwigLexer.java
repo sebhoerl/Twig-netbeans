@@ -54,12 +54,12 @@ public class TwigLexer {
 
     TwigState state;
 
-    protected class SortOperators implements Comparator {
+    protected class SortOperators implements Comparator<String> {
 
         @Override
-        public int compare( Object a, Object b ) {
+        public int compare( String a, String b ) {
 
-            int d = ((String)a).length() - ((String)b).length();
+            int d = a.length() - b.length();
             return d;
 
         }
@@ -88,7 +88,7 @@ public class TwigLexer {
         Collections.sort( OPERATORS, new SortOperators() );
         Collections.reverse( OPERATORS );
 
-        ArrayList<String> regex = new ArrayList();
+        ArrayList<String> regex = new ArrayList<String>();
 
         for ( String operator : OPERATORS ) {
 
@@ -110,7 +110,7 @@ public class TwigLexer {
 
     public List<TwigToken> tokenize( String lexCode, TwigState backupState ) {
 
-        tokens = new ArrayList();
+        tokens = new ArrayList<TwigToken>();
         state = ( backupState == null ) ? new TwigState() : backupState;
 
         code = lexCode;

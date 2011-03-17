@@ -33,15 +33,15 @@ public class TwigParser {
 
     State state = State.DATA;
 
-    Stack<TwigToken> blocks = new Stack();
-    List<TwigError> errors = new ArrayList();
+    Stack<TwigToken> blocks = new Stack<TwigToken>();
+    List<TwigError> errors = new ArrayList<TwigError>();
 
     public List<TwigError> parse( List<TwigToken> tokens ) {
 
         stream = tokens.listIterator();
         current = new TwigToken( TwigToken.Type.EOF, "", 0, new TwigState() );
         state = State.DATA;
-        errors = new ArrayList();
+        errors = new ArrayList<TwigError>();
 
         while ( nextToken() ) {
             

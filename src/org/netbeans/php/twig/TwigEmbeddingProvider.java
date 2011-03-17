@@ -44,7 +44,7 @@ public class TwigEmbeddingProvider extends EmbeddingProvider {
         int length = 0;
 
         while ( sequence.moveNext() ) {
-            NbTwigTokenId t = (NbTwigTokenId) sequence.token().id();
+            NbTwigTokenId t = sequence.token().id();
 
             if ( t.type == TwigToken.Type.TEXT ) {
 
