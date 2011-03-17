@@ -116,6 +116,7 @@
             <public-packages>
                 <package>org.netbeans.php.twig</package>
                 <package>org.netbeans.php.twig.lexer</package>
+                <package>org.netbeans.php.twig.parser</package>
             </public-packages>
         </data>
     </configuration>

@@ -3,4 +3,5 @@ OpenIDE-Module: org.netbeans.php.twig/1
 OpenIDE-Module-Implementation-Version: 2
 OpenIDE-Module-Layer: org/netbeans/php/twig/layer.xml
 OpenIDE-Module-Localizing-Bundle: org/netbeans/php/twig/Bundle.properties
+OpenIDE-Module-Specification-Version: 1
 
