@@ -1,7 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Twig plugin for Netbeans.
+ *
+ * Copyright (c) 2011 Sebastian Hörl
+ *
+ * For warranty and licensing information, view the LICENSE file.
  */
+
 package org.netbeans.php.twig;
 
 import java.io.IOException;
@@ -16,6 +20,11 @@ import org.openide.nodes.Children;
 import org.openide.util.Lookup;
 import org.openide.text.DataEditorSupport;
 
+/**
+ * Twig MultiDataObject
+ *
+ * @author Sebastian Hörl
+ */
 public class TwigDataObject extends MultiDataObject {
 
     public TwigDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {

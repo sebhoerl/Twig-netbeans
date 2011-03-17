@@ -1,3 +1,11 @@
+/**
+ * Twig plugin for Netbeans.
+ *
+ * Copyright (c) 2011 Sebastian Hörl
+ *
+ * For warranty and licensing information, view the LICENSE file.
+ */
+
 package org.netbeans.php.twig.lexer;
 
 import org.netbeans.api.lexer.*;
