@@ -96,6 +96,9 @@
                 <file name="org-netbeans-php-twig-parser-NbTwigParser$Factory.instance">
                     <attr name="instanceOf" stringvalue="org.netbeans.modules.parsing.spi.ParserFactory"/>
                 </file>
+                <folder name="CompletionProviders">
+                    <file name="org-netbeans-modules-html-editor-completion-HtmlCompletionProvider.instance"/>
+                </folder>
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="org.netbeans.php.twig.Bundle"/>
                 <folder name="FontsColors">
                     <folder name="NetBeans">
