@@ -20,10 +20,11 @@ public class TwigLexer {
     static Pattern REGEX_NUMBER = Pattern.compile( "^[0-9]+(\\.[0-9]+)?" );
     static Pattern REGEX_STRING = Pattern.compile( "^\"([^\"\\\\]*(\\\\.[^\"\\\\]*)*)\"|^'([^'\\\\]*(\\\\.[^'\\\\]*)*)'", Pattern.MULTILINE );
     static Pattern REGEX_ALPHANUM_END = Pattern.compile( "[A-Za-z0-9]$" );
-    //static Pattern REGEX_WHITESPACE = Pattern.compile( "^\\s+" );
     static Pattern REGEX_WHITESPACE = Pattern.compile( "^[\\s]" );
     static Pattern REGEX_WHITESPACE_END = Pattern.compile( "[\\s]+$" );
     Pattern REGEX_OPERATOR = null;
+
+    static Pattern REGEX_ENDRAW = Pattern.compile( "\\{%([\\s]*)endraw([\\s])*%\\}" );
 
     static String PUNCTUATION = "()[]{}?:.,|";
 
@@ -114,6 +115,8 @@ public class TwigLexer {
         while ( cursor < end ) {
 
             switch ( state.mode ) {
+                case RAW:
+                    lexRawData(); break;
                 case DATA:
                     lexData(); break;
                 case BLOCK:
@@ -128,6 +131,26 @@ public class TwigLexer {
 
         pushToken( TwigToken.Type.EOF, "" );
         return tokens;
+
+    }
+
+    protected void lexRawData() {
+
+        Matcher matcher = REGEX_ENDRAW.matcher( code );
+        if ( matcher.find( cursor )) {
+
+            String content = code.substring( cursor, matcher.start() );
+            pushToken( TwigToken.Type.TEXT, content );
+            moveCursor( content );
+            state.mode = TwigState.Mode.DATA;
+
+        } else {
+
+            String rest = code.substring( cursor );
+            pushToken( TwigToken.Type.TEXT,rest );
+            moveCursor( rest );
+
+        }
 
     }
 
@@ -182,8 +205,6 @@ public class TwigLexer {
             moveCursor( token );
             state.mode = TwigState.Mode.BLOCK;
 
-            // TODO: handle raw input
-
         } else if ( token.equals( VAR_START ) ) {
 
             pushToken( TwigToken.Type.VAR_START, token );
@@ -237,7 +258,8 @@ public class TwigLexer {
         if ( pos == cursor && state.brackets.empty() ) {
             pushToken( TwigToken.Type.BLOCK_END, BLOCK_END );
             moveCursor( BLOCK_END );
-            state.mode = TwigState.Mode.DATA;
+            state.mode = state.captureRawData ? TwigState.Mode.RAW : TwigState.Mode.DATA;
+            state.captureRawData = false;
         } else {
             lexExpression();
         }
@@ -287,6 +309,10 @@ public class TwigLexer {
         matcher = REGEX_NAME.matcher( chunk );
         if ( matcher.find() ) {
 
+            if ( state.seekTag && matcher.group().equals( "raw" ) ) {
+                state.captureRawData = true;
+            }
+
             pushToken( state.seekTag ? TwigToken.Type.TAG : TwigToken.Type.NAME, matcher.group() );
             moveCursor( matcher.group() );
             state.seekTag = false;
@@ -317,7 +343,7 @@ public class TwigLexer {
 
                 if ( state.brackets.empty() ) {
 
-                    // TODO: Too many closing brackets!!!
+                    // too many closing brackets
                     pushToken( TwigToken.Type.ERROR, currentChar );
                     moveCursor( String.valueOf( currentChar ) );
                     return;
@@ -331,7 +357,7 @@ public class TwigLexer {
 
                     if ( !bracket.equals( currentChar ) ) {
 
-                        // TODO: We got a bracket but the wrong one...
+                        // wrong bracket.. let parser do the rest
                         pushToken( TwigToken.Type.ERROR, currentChar );
                         moveCursor( String.valueOf( currentChar ) );
                         return;
@@ -365,7 +391,7 @@ public class TwigLexer {
 
         }
 
-        // TODO: We got some unlexable code...
+        // Now we got a problem... delegate it to the parser
         pushToken( TwigToken.Type.ERROR, currentChar );
         moveCursor( currentChar );
         return;

@@ -14,9 +14,11 @@ public class TwigState {
         DATA,
         BLOCK,
         VAR,
-        COMMENT
+        COMMENT,
+        RAW
     };
 
+    boolean captureRawData = false;
     boolean seekTag = false;
     Mode mode = Mode.DATA;
     Stack<String> brackets = new Stack();
