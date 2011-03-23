@@ -83,15 +83,21 @@ public class TwigParser {
         if ( tag.equals("for") ) return true;
         if ( tag.equals("spaceless") ) return true;
         if ( tag.equals("autoescape") ) return true;
-        //if ( tag.equals("set") ) return true;
-        if ( tag.equals("block") ) return true;
         if ( tag.equals("raw") ) return true;
         if ( tag.equals("macro") ) return true;
         if ( tag.equals("filter") ) return true;
+        if ( tag.equals("set") ) return true;
+        if ( tag.equals("block" ) ) return true;
         return false;
     }
 
     static Pattern REGEX_IS_END = Pattern.compile( "^end" );
+
+    public String buildBlockTag( String name ) {
+
+        return "block:" + name;
+
+    }
 
     public boolean isEndTag( String tag ) {
         if ( REGEX_IS_END.matcher( tag ).find() ) {
@@ -104,8 +110,12 @@ public class TwigParser {
 
         TwigToken open = currentToken();
         TwigToken tag = null;
+        TwigToken name = null;
+        int nonWhitespaces = 0;
 
         boolean empty = true;
+        boolean foundOperator = false;
+
 
         while ( nextToken() ) {
 
@@ -119,11 +129,25 @@ public class TwigParser {
 
                 if ( tag != null ) {
 
-                    if ( needsEndTag( tag.content ) ) {
+                    if ( tag.content.equals("set") && foundOperator ) {
+                        // ignore one-line "set" blocks
+                    } else if ( tag.content.equals("block") && nonWhitespaces > 2 ) {
+                        // ignore one-line "block" blocks
+                    } else if (needsEndTag(tag.content)) {
+
+                        if ( tag.content.equals("block" ) ) {
+
+                            if ( name == null ) {
+                                addError( "Unnamed block", tag.offset, tag.content.length() );
+                            }
+
+                        }
+                        
                         blocks.push( tag );
+
                     }
 
-                    if ( isEndTag( tag.content ) ) {
+                    if ( isEndTag( tag.content ) || tag.content.equals( "endblock" ) ) {
 
                         if ( blocks.empty() ) {
 
@@ -133,8 +157,10 @@ public class TwigParser {
 
                             TwigToken expected = blocks.pop();
                             if ( !tag.content.equals( "end" + expected.content ) ) {
+
                                 addError( "Unclosed '" + expected.content + "'", expected.offset, expected.content.length() );
                                 addError( "Expected 'end" + expected.content + "'", tag.offset, tag.content.length() );
+                            
                             }
 
                         }
@@ -149,6 +175,15 @@ public class TwigParser {
 
             if ( currentToken().type != TwigToken.Type.WHITESPACE ) {
                 empty = false;
+                nonWhitespaces++;
+            }
+
+            if ( currentToken().type == TwigToken.Type.OPERATOR && currentToken().content.equals( "=" ) ) {
+                foundOperator = true;
+            }
+
+            if ( tag != null && currentToken().type == TwigToken.Type.NAME ) {
+                name = currentToken();
             }
 
             if ( currentToken().type == TwigToken.Type.TAG ) {
