@@ -1,0 +1,5 @@
+Version 1.2
+- Complete rewrite of the plugin
+- Code highlighting for large templates
+- Error parsing dropped (maybe will be added again)
+- Css & Js embedded highlighting in HTML
