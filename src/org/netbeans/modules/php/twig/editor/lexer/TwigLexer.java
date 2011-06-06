@@ -66,7 +66,7 @@ public class TwigLexer implements Lexer<TwigTokenId> {
     static protected String COMMENT_END = "{#";
     static protected String VARIABLE_END = "{{";
     
-    static protected String PUNCTUATION = "()[]{}?:.,";
+    static protected String PUNCTUATION = "|()[]{}?:.,";
     
     static protected Pattern REGEX_ALPHANUM_END = Pattern.compile( "[A-Za-z0-9]$" );
     static protected Pattern REGEX_WHITESPACE_END = Pattern.compile( "[\\s]+$" );
@@ -193,7 +193,7 @@ public class TwigLexer implements Lexer<TwigTokenId> {
                     }
                     
                     /* End markups */
-
+                    
                     if ( c == '%' || c == '}' ) {
                         
                         d = input.read();
@@ -212,17 +212,19 @@ public class TwigLexer implements Lexer<TwigTokenId> {
                         input.backup( 2 );
                         
                     }
-                            
+                    
                     /* Operators */
                     
                     if ( !( state.main == TwigLexerState.Main.INSTRUCTION && state.sub == TwigLexerState.Sub.INIT ) ) {
                     
+                        d = c;
+                        
                         int characters = 0;
                         while ( c != LexerInput.EOF && input.readLength() < OPERATOR_LENGTH ) {
                             c = input.read();
                             characters++;
                         }
-
+                        
                         matcher = REGEX_OPERATOR.matcher( input.readText() );
                         if ( matcher.find() ) {
 
