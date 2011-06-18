@@ -1,7 +1,7 @@
 /**
  * Twig for Netbeans
  * 
- * Copyright (c) 2011 Sebastian Hörl
+ * Copyright (c) 2011 Sebastian HÃ¶rl
  * 
  * For warranty and licesning information, view the LICENSE file.
  */
@@ -15,8 +15,9 @@ import org.netbeans.modules.csl.spi.DefaultLanguageConfig;
 import org.netbeans.modules.csl.spi.LanguageRegistration;
 import org.netbeans.modules.parsing.spi.Parser;
 import org.netbeans.modules.php.twig.editor.lexer.TwigTopTokenId;
+import org.netbeans.modules.php.twig.editor.parsing.TwigParser;
 
-@LanguageRegistration(mimeType="text/twig", useCustomEditorKit=false) //NOI18N
+@LanguageRegistration(mimeType="text/twig", useCustomEditorKit=true) //NOI18N
 public class TwigLanguage extends DefaultLanguageConfig {
     
     public TwigLanguage() {}
@@ -38,13 +39,13 @@ public class TwigLanguage extends DefaultLanguageConfig {
 
     // Service registrations
     @Override
-    public boolean isUsingCustomEditorKit() { return false; }
+    public boolean isUsingCustomEditorKit() { return true; }
 
     @Override
     public Parser getParser() { return new TwigParser(); }
 
     @Override
-    public boolean hasStructureScanner() { return true; }
+    public boolean hasStructureScanner() { return false; }
 
     @Override
     public StructureScanner getStructureScanner() { return new TwigStructureScanner(); }

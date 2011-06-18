@@ -45,18 +45,18 @@ public class TwigEmbeddingProvider extends EmbeddingProvider {
                 if ( offset < 0 ) offset = sequence.offset();
                 length += t.length();
             } else if ( offset >= 0 ) {
-                embeddings.add( snapshot.create( offset, length, "text/xhtml" ) );
+                embeddings.add( snapshot.create( offset, length, "text/html" ) );
                 offset = -1;
                 length = 0;
             }
         }
         
         if ( offset >= 0 ) {
-            embeddings.add( snapshot.create( offset, length, "text/xhtml" ) );
+            embeddings.add( snapshot.create( offset, length, "text/html" ) );
         }
         
         if (embeddings.isEmpty()) {
-            return Collections.emptyList();
+            return Collections.singletonList( snapshot.create( "", "text/html" ) );
         } else {
             return Collections.singletonList( Embedding.create(embeddings) );
         }

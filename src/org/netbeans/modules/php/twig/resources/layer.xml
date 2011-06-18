@@ -15,6 +15,14 @@
                     <attr name="instanceCreate" methodvalue="org.netbeans.modules.php.twig.editor.lexer.TwigTopTokenId.language"/>
                     <attr name="instanceOf" stringvalue="org.netbeans.api.lexer.Language"/>
                 </file>
+                
+                <!--<file name="org-netbeans-modules-php-twig-editor-parsing-TwigParser$Factory.instance">
+                    <attr name="instanceOf" stringvalue="org.netbeans.modules.parsing.spi.ParserFactory"/>
+                </file>-->
+                
+                <!--<file name="org-netbeans-modules-php-twig-editor-parsing-TwigSyntaxValidationTask$Factory.instance">
+                    <attr name="instanceOf" stringvalue="org.netbeans.modules.parsing.spi.TaskFactory"/>
+                </file>-->
 
                 <file name="org-netbeans-modules-php-twig-editor-embedding-TwigEmbeddingProvider$Factory.instance">
                     <attr name="instanceOf" stringvalue="org.netbeans.modules.parsing.spi.TaskFactory" />
@@ -154,7 +162,7 @@
     <folder name="CslPlugins">
         <folder name="text">
             <folder name="twig">
-                <attr name="useCustomEditorKit" boolvalue="false"/>
+                <attr name="useCustomEditorKit" boolvalue="true"/>
                 <file name="language.instance">
                     <attr name="instanceClass" stringvalue="org.netbeans.modules.php.twig.editor.gsf.TwigLanguage"/>
                 </file>
