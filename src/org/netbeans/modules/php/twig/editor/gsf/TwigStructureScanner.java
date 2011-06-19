@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.ImageIcon;
+import org.netbeans.lib.editor.util.CharSequenceUtilities;
 import org.netbeans.modules.csl.api.ElementHandle;
 import org.netbeans.modules.csl.api.ElementKind;
 import org.netbeans.modules.csl.api.HtmlFormatter;
@@ -35,9 +36,8 @@ public class TwigStructureScanner implements StructureScanner {
         List<TwigStructureItem> items = new ArrayList<TwigStructureItem>();
         
         for ( TwigParserResult.Block item : result.getBlocks() ) {
-            if ( item.getDescription().equals( "block" ) || item.getDescription().equals( "*inline-block" ) ) {
+            if ( CharSequenceUtilities.equals( item.getDescription(), "block" ) || CharSequenceUtilities.equals( item.getDescription(), "*inline-block" ) ) {
                 blocks.add( item );
-                System.out.println( item.getDescription() + ": " + item.getOffset() + " to " + ( item.getOffset() + item.getLength() ) );  
             }
         }
         
@@ -72,24 +72,23 @@ public class TwigStructureScanner implements StructureScanner {
     public Map<String, List<OffsetRange>> folds( ParserResult info ) { 
         
         TwigParserResult result = (TwigParserResult)info;
-        Map<String, List<OffsetRange>> folds = new HashMap<String, List<OffsetRange>>();
+        List<OffsetRange> ranges = new ArrayList<OffsetRange>();
         
         for ( TwigParserResult.Block block : result.getBlocks() ) {
-            
-            if ( block.getDescription().startsWith( "*" ) ) continue;
-            folds.put( "codeblocks", Collections.singletonList( new OffsetRange( 
+
+            ranges.add( new OffsetRange( 
                     block.getOffset(), block.getOffset() + block.getLength()
-            ) ) );
+            ) );
             
         }
-        
-        return folds;
+
+        return Collections.singletonMap( "codefolds", ranges );
         
     }
 
     @Override
     public Configuration getConfiguration() {
-        return new Configuration( true, false );
+        return null;
     }
     
 }

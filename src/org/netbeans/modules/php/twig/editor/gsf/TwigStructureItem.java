@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import javax.swing.ImageIcon;
+import org.netbeans.lib.editor.util.CharSequenceUtilities;
 import org.netbeans.modules.csl.api.ElementHandle;
 import org.netbeans.modules.csl.api.ElementKind;
 import org.netbeans.modules.csl.api.HtmlFormatter;
@@ -78,7 +79,7 @@ public class TwigStructureItem implements StructureItem {
 
     @Override
     public Set<Modifier> getModifiers() {
-        if ( item.getDescription().startsWith( "*" ) )
+        if ( CharSequenceUtilities.startsWith( item.getDescription(), "*" ) )
             return Collections.singleton( Modifier.STATIC );
         return Collections.emptySet();
     }
@@ -145,7 +146,7 @@ public class TwigStructureItem implements StructureItem {
 
         @Override
         public Set<Modifier> getModifiers() {
-            if ( item.getDescription().startsWith( "*" ) )
+            if ( CharSequenceUtilities.startsWith( item.getDescription(), "*" ) )
                 return Collections.singleton( Modifier.STATIC );
             return Collections.emptySet();
         }

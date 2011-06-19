@@ -9,6 +9,7 @@ import org.netbeans.api.lexer.LanguagePath;
 import org.netbeans.api.lexer.Token;
 import org.netbeans.api.lexer.TokenHierarchy;
 import org.netbeans.api.lexer.TokenSequence;
+import org.netbeans.lib.editor.util.CharSequenceUtilities;
 import org.netbeans.modules.parsing.api.Snapshot;
 import org.netbeans.modules.parsing.api.Task;
 import org.netbeans.modules.parsing.spi.ParseException;
@@ -91,7 +92,7 @@ public class TwigParser extends Parser {
                             
                             token = (Token<TwigTokenId>) sequence.token();
                             if ( token.id() == TwigTokenId.T_TWIG_NAME ) {
-                                instruction.extra = token.text().toString();
+                                instruction.extra = token.text();
                             }
                             if ( token.id() == TwigTokenId.T_TWIG_INSTRUCTION ) {
                                 instruction.endTokenIndex = sequence.index();
@@ -110,7 +111,7 @@ public class TwigParser extends Parser {
                                 token = (Token<TwigTokenId>) sequence.token();
                                 if ( token.id() == TwigTokenId.T_TWIG_FUNCTION ) {
                                     
-                                    instruction.function = token.text().toString();
+                                    instruction.function = token.text();
                                     instruction.functionTokenIndex = sequence.index();
                                     instruction.functionFrom = token.offset(tokenHierarchy);
                                     instruction.functionLength = token.length();
@@ -120,10 +121,10 @@ public class TwigParser extends Parser {
                                 
                             }
                             
-                            if ( parseElements.contains( instruction.function ) ) 
+                            if ( parseElements.contains( instruction.function.toString() ) ) 
                             {
                                 /* Have we captured a standalone instruction? */
-                                if ( "block".equals(instruction.function) ) {
+                                if ( CharSequenceUtilities.equals( instruction.function, "block" ) ) {
                                     
                                     boolean standalone = false;
                                     int names = 0;
@@ -149,7 +150,7 @@ public class TwigParser extends Parser {
                                         result.addBlock( "*inline-block", instruction.from, instruction.length, instruction.extra );
                                     }
                                     
-                                } else if ( "set".equals(instruction.function) ) {
+                                } else if ( CharSequenceUtilities.equals( instruction.function, "set" ) ) {
                                     
                                     boolean standalone = false;
                                     
@@ -189,7 +190,7 @@ public class TwigParser extends Parser {
             
             for ( Instruction instruction : instructionList ) {
                 
-                if ( instruction.function.startsWith( "end" ) ) {
+                if ( CharSequenceUtilities.startsWith( instruction.function, "end" ) ) {
                     
                     if ( instructionStack.empty() ) { // End tag, but no more tokens on stack!
                         
@@ -198,8 +199,8 @@ public class TwigParser extends Parser {
                             instruction.functionFrom,
                             instruction.functionLength
                         );
-                        
-                    } else if ( instruction.function.endsWith( instructionStack.peek().function ) ) {
+
+                    } else if ( CharSequenceUtilities.endsWith( instruction.function, instructionStack.peek().function ) ) {
                         // end[sth] found a [sth] on the stack!
                         
                         Instruction start = instructionStack.pop();
@@ -269,8 +270,8 @@ public class TwigParser extends Parser {
     
     class Instruction {
         
-        String function = "";
-        String extra = "";
+        CharSequence function = null;
+        CharSequence extra = null;
         int startTokenIndex = 0;
         int endTokenIndex = 0;
         int functionTokenIndex = 0;
