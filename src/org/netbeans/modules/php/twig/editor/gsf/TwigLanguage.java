@@ -9,11 +9,15 @@
 package org.netbeans.modules.php.twig.editor.gsf;
 
 import org.netbeans.api.lexer.Language;
+import org.netbeans.modules.csl.api.CodeCompletionHandler;
+import org.netbeans.modules.csl.api.Formatter;
 import org.netbeans.modules.csl.api.StructureScanner;
 import org.netbeans.modules.csl.spi.CommentHandler;
 import org.netbeans.modules.csl.spi.DefaultLanguageConfig;
 import org.netbeans.modules.csl.spi.LanguageRegistration;
 import org.netbeans.modules.parsing.spi.Parser;
+import org.netbeans.modules.php.twig.editor.completion.TwigCompletionHandler;
+import org.netbeans.modules.php.twig.editor.format.TwigFormatter;
 import org.netbeans.modules.php.twig.editor.lexer.TwigTopTokenId;
 import org.netbeans.modules.php.twig.editor.parsing.TwigParser;
 
@@ -52,5 +56,20 @@ public class TwigLanguage extends DefaultLanguageConfig {
 
     @Override
     public boolean hasHintsProvider() { return false; }
+    
+    @Override
+    public CodeCompletionHandler getCompletionHandler() {
+        return new TwigCompletionHandler();
+    }
+    
+    @Override
+    public boolean hasFormatter() {
+        return true;
+    }
+
+    @Override
+    public Formatter getFormatter() {
+        return new TwigFormatter();
+    }
 
 }

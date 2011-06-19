@@ -82,8 +82,6 @@ public class TwigStructureScanner implements StructureScanner {
             
         }
         
-        System.out.println( "FOLDS " + ranges.size() );
-
         return Collections.singletonMap( "tags", ranges );
         
     }
