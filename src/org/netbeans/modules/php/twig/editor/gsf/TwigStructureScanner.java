@@ -30,7 +30,42 @@ public class TwigStructureScanner implements StructureScanner {
 
     @Override
     public List<? extends StructureItem> scan( ParserResult info ) { 
-        return Collections.emptyList();
+        TwigParserResult result = (TwigParserResult)info;
+        List<TwigParserResult.Block> blocks = new ArrayList<TwigParserResult.Block>();
+        List<TwigStructureItem> items = new ArrayList<TwigStructureItem>();
+        
+        for ( TwigParserResult.Block item : result.getBlocks() ) {
+            if ( item.getDescription().equals( "block" ) || item.getDescription().equals( "*inline-block" ) ) {
+                blocks.add( item );
+                System.out.println( item.getDescription() + ": " + item.getOffset() + " to " + ( item.getOffset() + item.getLength() ) );  
+            }
+        }
+        
+        boolean isTopLevel = false;
+        
+        for ( TwigParserResult.Block item : blocks ) {
+            
+            isTopLevel = true;
+            
+            for ( TwigParserResult.Block check : blocks ) {
+                
+                if ( item.getOffset() > check.getOffset() && 
+                     item.getOffset() + item.getLength() < check.getOffset() + check.getLength()
+                ) {
+                    isTopLevel = false;
+                    break;
+                }
+                
+            }
+            
+            if ( isTopLevel ) {
+                items.add( new TwigStructureItem( result.getSnapshot(), item, blocks ) );
+            }
+            
+        }
+
+        return items;
+        
     }
 
     @Override
@@ -41,6 +76,7 @@ public class TwigStructureScanner implements StructureScanner {
         
         for ( TwigParserResult.Block block : result.getBlocks() ) {
             
+            if ( block.getDescription().startsWith( "*" ) ) continue;
             folds.put( "codeblocks", Collections.singletonList( new OffsetRange( 
                     block.getOffset(), block.getOffset() + block.getLength()
             ) ) );
@@ -52,6 +88,8 @@ public class TwigStructureScanner implements StructureScanner {
     }
 
     @Override
-    public Configuration getConfiguration() { return null; }
+    public Configuration getConfiguration() {
+        return new Configuration( true, false );
+    }
     
 }

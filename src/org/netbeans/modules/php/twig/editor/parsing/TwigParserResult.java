@@ -27,8 +27,8 @@ public class TwigParserResult extends ParserResult {
     
     public List<Block> getBlocks() { return blockList; }
     
-    public void addBlock( String function, int offset, int length ) { 
-        blockList.add( new Block( function, offset, length ) ); 
+    public void addBlock( String function, int offset, int length, String extra ) { 
+        blockList.add( new Block( function, offset, length, extra ) ); 
     }
     
     @Override
@@ -119,12 +119,16 @@ public class TwigParserResult extends ParserResult {
         String function;
         int offset;
         int length;
+        String extra;
         
-        public Block( String function, int offset, int length ) {
+        public Block( String function, int offset, int length, String extra ) {
             this.function = function;
             this.offset = offset;
             this.length = length;
+            this.extra = extra;
         }
+        
+        public String getExtra() { return extra; }
         
         public String getDescription() {
             return function;
