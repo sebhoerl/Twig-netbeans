@@ -45,7 +45,7 @@ public class TwigLanguage extends DefaultLanguageConfig {
     public Parser getParser() { return new TwigParser(); }
 
     @Override
-    public boolean hasStructureScanner() { return false; }
+    public boolean hasStructureScanner() { return true; }
 
     @Override
     public StructureScanner getStructureScanner() { return new TwigStructureScanner(); }
