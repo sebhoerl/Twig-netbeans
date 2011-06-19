@@ -125,6 +125,7 @@ public class TwigParser extends Parser {
                                 if ( "block".equals(instruction.function) ) {
                                     
                                     boolean standalone = false;
+                                    int names = 0;
                                     
                                     do {
                                         
@@ -132,6 +133,10 @@ public class TwigParser extends Parser {
                                         token = (Token<TwigTokenId>)sequence.token();
                                         
                                         if ( token.id() == TwigTokenId.T_TWIG_NAME || token.id() == TwigTokenId.T_TWIG_STRING ) {
+                                            names++;
+                                        }
+                                        
+                                        if ( names > 1 ) {
                                             standalone = true;
                                             break;
                                         }
