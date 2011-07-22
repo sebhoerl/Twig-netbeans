@@ -180,13 +180,7 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages>
-                <package>org.netbeans.modules.php.twig.editor</package>
-                <package>org.netbeans.modules.php.twig.editor.embedding</package>
-                <package>org.netbeans.modules.php.twig.editor.gsf</package>
-                <package>org.netbeans.modules.php.twig.editor.lexer</package>
-                <package>org.netbeans.modules.php.twig.editor.parsing</package>
-            </public-packages>
+            <public-packages/>
         </data>
     </configuration>
 </project>

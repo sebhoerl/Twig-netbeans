@@ -16,14 +16,6 @@
                     <attr name="instanceOf" stringvalue="org.netbeans.api.lexer.Language"/>
                 </file>
                 
-                <!--<file name="org-netbeans-modules-php-twig-editor-parsing-TwigParser$Factory.instance">
-                    <attr name="instanceOf" stringvalue="org.netbeans.modules.parsing.spi.ParserFactory"/>
-                </file>-->
-                
-                <!--<file name="org-netbeans-modules-php-twig-editor-parsing-TwigSyntaxValidationTask$Factory.instance">
-                    <attr name="instanceOf" stringvalue="org.netbeans.modules.parsing.spi.TaskFactory"/>
-                </file>-->
-
                 <file name="org-netbeans-modules-php-twig-editor-embedding-TwigEmbeddingProvider$Factory.instance">
                     <attr name="instanceOf" stringvalue="org.netbeans.modules.parsing.spi.TaskFactory" />
                 </file>
@@ -42,7 +34,6 @@
                 
                 <folder name="FoldManager">
                     <file name="org-netbeans-modules-csl-editor-fold-GsfFoldManagerFactory.instance"/>
-                    <!--<file name="org-netbeans-modules-php-twig-fold-TwigFoldManager$Factory.instance"/>-->
                 </folder>
                 
                 <folder name="SideBar">

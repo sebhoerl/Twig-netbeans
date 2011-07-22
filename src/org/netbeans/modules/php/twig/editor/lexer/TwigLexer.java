@@ -197,6 +197,11 @@ public class TwigLexer implements Lexer<TwigTokenId> {
                     if ( c == '%' || c == '}' ) {
                         
                         d = input.read();
+                        
+                        if ( d == LexerInput.EOF ) {
+                            return TwigTokenId.T_TWIG_OTHER;
+                        }
+                        
                         int e = input.read();
                         
                         if ( d == '}' && e == LexerInput.EOF ) {

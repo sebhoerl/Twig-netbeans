@@ -84,6 +84,7 @@ public class TwigParser extends Parser {
                     if ( token.id() == TwigTokenId.T_TWIG_INSTRUCTION ) {
                         
                         Instruction instruction = new Instruction();
+                        instruction.function = "";
                         instruction.startTokenIndex = sequence.index();
                         instruction.endTokenIndex = sequence.index();
                         instruction.from = token.offset(tokenHierarchy);
