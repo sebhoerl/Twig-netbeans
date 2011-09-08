@@ -29,8 +29,8 @@ public class TwigParser extends Parser {
         parseElements.add( "endfor" );
         
         parseElements.add( "if" );
-        parseElements.add( "elseif" );
         //parseElements.add( "else" ); // TODO: Check for enclosing if block!
+        //parseElements.add( "elseif" ); // TODO: Same as above!
         parseElements.add( "endif" );
         
         parseElements.add( "block" );
